@@ -8,9 +8,11 @@ REST API untuk pengelolaan katalog penyewaan peralatan outdoor, dibangun menggun
 - Validasi input menggunakan Laravel.
 - Format respons JSON menggunakan API Resource.
 - Pencarian peralatan berdasarkan kata kunci.
-- Filter data peralatan.
+- Filter data berdasarkan kategori, kondisi, status, dan harga.
 - Pengurutan data.
 - Pagination.
+- Statistik inventaris.
+- Pengujian otomatis menggunakan PHPUnit.
 - Dokumentasi API menggunakan Scramble.
 
 ## Teknologi
@@ -18,12 +20,18 @@ REST API untuk pengelolaan katalog penyewaan peralatan outdoor, dibangun menggun
 - PHP 8.2+
 - Laravel 12
 - MySQL
-- Laravel Sanctum
+- Laravel API Resource
 - Scramble API Documentation
+- PHPUnit
 
 ## Persyaratan
 
-Pastikan perangkat sudah memiliki PHP, Composer, Node.js dan npm, serta MySQL.
+Pastikan perangkat sudah memiliki:
+
+- PHP dan ekstensi yang dibutuhkan Laravel.
+- Composer.
+- MySQL.
+- Node.js dan npm jika diperlukan untuk aset frontend Laravel.
 
 ## Instalasi
 
@@ -33,7 +41,7 @@ Pastikan perangkat sudah memiliki PHP, Composer, Node.js dan npm, serta MySQL.
    git clone https://github.com/destrjoy/BTNG-Backend-AuraCantikaPutri.git
    ```
 
-2. Masuk ke direktori project:
+2. Masuk ke direktori proyek:
 
    ```bash
    cd BTNG-Backend-AuraCantikaPutri
@@ -45,13 +53,15 @@ Pastikan perangkat sudah memiliki PHP, Composer, Node.js dan npm, serta MySQL.
    composer install
    ```
 
-4. Salin konfigurasi environment:
+4. Salin konfigurasi environment.
+
+   Untuk Git Bash atau Linux:
 
    ```bash
    cp .env.example .env
    ```
 
-   Untuk Windows Command Prompt, gunakan:
+   Untuk Windows Command Prompt:
 
    ```cmd
    copy .env.example .env
@@ -63,18 +73,29 @@ Pastikan perangkat sudah memiliki PHP, Composer, Node.js dan npm, serta MySQL.
    php artisan key:generate
    ```
 
-6. Buat database MySQL bernama `gearspace_db`, lalu sesuaikan konfigurasi `DB_*` pada file `.env` dengan database lokal.
+6. Buat database MySQL bernama `gearspace_db`, lalu sesuaikan konfigurasi database pada file `.env`.
 
-7. Jalankan migrasi:
+   Contoh konfigurasi:
+
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=gearspace_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+7. Jalankan migrasi database:
 
    ```bash
    php artisan migrate
    ```
 
-8. Isi data contoh:
+8. Isi database dengan data contoh:
 
    ```bash
-   php artisan db:seed --class=PeralatanSeeder
+   php artisan db:seed
    ```
 
 9. Jalankan server lokal:
@@ -83,7 +104,9 @@ Pastikan perangkat sudah memiliki PHP, Composer, Node.js dan npm, serta MySQL.
    php artisan serve
    ```
 
-API lokal dapat diakses melalui `http://127.0.0.1:8000`.
+API lokal dapat diakses melalui:
+
+`http://127.0.0.1:8000`
 
 ## Endpoint API
 
@@ -94,19 +117,15 @@ API lokal dapat diakses melalui `http://127.0.0.1:8000`.
 | GET | `/api/peralatan/{peralatan}` | Menampilkan detail peralatan |
 | PUT/PATCH | `/api/peralatan/{peralatan}` | Memperbarui peralatan |
 | DELETE | `/api/peralatan/{peralatan}` | Menghapus peralatan |
+| GET | `/api/peralatan/statistik` | Menampilkan statistik inventaris |
 
-## Dokumentasi API
+### Fitur pencarian dan filter
 
-Setelah server dijalankan, buka:
+Endpoint daftar peralatan mendukung parameter pencarian dan filter, antara lain:
 
-`http://127.0.0.1:8000/docs/api`
-
-Dokumentasi menyediakan informasi endpoint, parameter, serta format request dan response API.
-
-## Catatan Konfigurasi
-
-Jangan mengunggah file `.env` yang berisi kredensial atau application key ke repository publik. Gunakan `.env.example` sebagai template konfigurasi.
-
-## Repository
-
-https://github.com/destrjoy/BTNG-Backend-AuraCantikaPutri
+- `search`: mencari peralatan berdasarkan kata kunci.
+- `kategori`: memfilter berdasarkan kategori.
+- `kondisi`: memfilter berdasarkan kondisi peralatan.
+- `status`: memfilter berdasarkan status ketersediaan.
+- `harga_min`: menentukan harga sewa minimum.
+- `harga_max`: menentukan harga sewa maksimum

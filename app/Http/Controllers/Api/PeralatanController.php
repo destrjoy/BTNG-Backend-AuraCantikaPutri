@@ -10,6 +10,21 @@ use Illuminate\Validation\Rule;
 
 class PeralatanController extends Controller
 {
+    
+public function statistik()
+{
+    return response()->json([
+        'message' => 'Statistik inventaris berhasil diambil',
+        'data' => [
+            'total_peralatan' => Peralatan::count(),
+            'stok_tersedia' => Peralatan::where('status', 'tersedia')->count(),
+            'stok_habis' => Peralatan::where('stok', 0)->count(),
+            'perlu_perbaikan' => Peralatan::where('kondisi', 'perlu_perbaikan')->count(),
+            'total_kategori' => Peralatan::distinct('kategori')->count('kategori'),
+        ],
+    ]);
+}
+
     public function index(Request $request)
     {
         $query = Peralatan::query();
